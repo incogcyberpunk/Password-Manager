@@ -11,12 +11,14 @@ import Background from "../../components/Background.jsx";
 import Introduction from "../../components/Introduction.jsx";
 
 import useLogin from "../../hooks/useLogin.js";
+import { useTheme } from "../../context/theme.context.jsx";
 import eyeOpen from "../../assets/animatedGIF/eyeOpen.svg";
 import eyeCross from "../../assets/animatedGIF/eyeClose.svg";
 import Globe from "../../components/Globe.jsx";
 
 export default function Login() {
   const { login } = useLogin();
+  const { theme } = useTheme();
   const radioClick = useRef(null);
   const initialLoad = useRef(true);
 
@@ -62,44 +64,42 @@ export default function Login() {
 
   return (
     <>
-      <div className="max-w-[468px] sm:max-w-screen-sm">
+      <div className="min-h-screen w-full">
         <Navbar />
-        <main className="z-10">
+        <main className="z-10 flex items-center justify-center min-h-[calc(100vh-80px)]">
           <Background>
-            <form className="p-5 rounded-lg z-50" onSubmit={handleSubmit} onLoad={() => {
+            <form className={`p-6 md:p-10 rounded-3xl md:rounded-[2rem] z-50 w-full max-w-md md:max-w-2xl mx-auto shadow-2xl backdrop-blur-sm border-2 ${theme === 'light' ? 'bg-white/95 text-gray-900 border-purple-200' : 'bg-slate-800/95 text-white border-slate-700'}`} onSubmit={handleSubmit} onLoad={() => {
               if (initialLoad.current) {
                 radioClick.current.focus()
                 initialLoad.current = false
               }
             }}>
               <Introduction />
-              <div className="font-extrabold text-5xl flex  justify-center  underline my-7 sm:my-6">
-                <span className="">
-                  LOG<span className="text-purple-500">IN</span>
+              <div className="font-extrabold text-4xl md:text-5xl lg:text-6xl flex justify-center my-6 md:my-8 transition-all">
+                <span className="bg-gradient-to-r from-purple-600 via-pink-600 to-purple-600 bg-clip-text text-transparent animate-gradient-x">
+                  LOGIN
                 </span>
               </div>
 
               {/* Details Section */
-                <div className="flex flex-col items-center">
+                <div className="flex flex-col items-center space-y-6 md:space-y-8">
                   {/* Email/Username Input */}
-                  <div className="flex flex-col items-center">
-                    <div className="flex flex-col pl-3 xl:flex-row  ">
+                  <div className="flex flex-col items-center w-full space-y-4">
+                    <div className="flex flex-col items-center gap-3 w-full">
                       <label
                         htmlFor="emailUsername"
-                        className="pl- font-bold text-xl w-fit "
+                        className="font-bold text-2xl md:text-3xl lg:text-4xl text-center"
                       >
-                        <span className="text-xl sm:text-2xl xl:text-3xl">
-                          Email or Username :
-                        </span>
+                        Email or Username
                       </label>
 
-                      <div className="flex gap-3 mt-0 mb-2 sm:mb-0 items-center relative right-5 ">
-                        <div className="flex gap-2">
+                      <div className="flex gap-4 md:gap-6 items-center justify-center">
+                        <div className="flex gap-2 items-center">
                           <input
                             type="radio"
                             name="loginType"
                             id="usernameRadio"
-                            className="radio focus:border-none cursor-pointer"
+                            className="radio focus:border-none cursor-pointer w-5 h-5 md:w-6 md:h-6"
                             onClick={() => {
                               radioClick.current.focus();
                               setwhichRadio("username");
@@ -108,17 +108,17 @@ export default function Login() {
                           />
                           <label
                             htmlFor="usernameRadio"
-                            className="font-medium text-xl cursor-pointer"
+                            className="font-semibold text-lg md:text-xl lg:text-2xl cursor-pointer"
                           >
                             Username
                           </label>
                         </div>
-                        <div className="flex gap-2">
+                        <div className="flex gap-2 items-center">
                           <input
                             type="radio"
                             name="loginType"
                             id="emailRadio"
-                            className="radio focus:border-none text-3xl cursor-pointer"
+                            className="radio focus:border-none cursor-pointer w-5 h-5 md:w-6 md:h-6"
                             onClick={() => {
                               radioClick.current.focus();
                               setwhichRadio("email");
@@ -126,7 +126,7 @@ export default function Login() {
                           />
                           <label
                             htmlFor="emailRadio"
-                            className="font-medium text-xl w-fit cursor-pointer"
+                            className="font-semibold text-lg md:text-xl lg:text-2xl cursor-pointer"
                           >
                             Email
                           </label>
@@ -135,7 +135,7 @@ export default function Login() {
                     </div>
 
                     {/* Input Field */}
-                    <div className="w-full mb-3 ">
+                    <div className="w-full">
                       <input
                         ref={radioClick}
                         type="text"
@@ -145,85 +145,83 @@ export default function Login() {
                             ? loginData.email
                             : loginData.username
                         }
-                        placeholder="Email or Username"
+                        placeholder={whichRadio === "email" ? "Enter your email" : "Enter your username"}
                         id="emailUsername"
-                        className="inputField placeholder:text-md py-1 pl-3 pr-16"
+                        className="inputField placeholder:text-base md:placeholder:text-lg py-3 md:py-4 pl-5 md:pl-6 pr-5 w-full text-lg md:text-xl transition-all hover:border-purple-400 focus:scale-[1.02] shadow-md"
                         onChange={handleChange}
                       />
                     </div>
                   </div>
 
                   {/* Password Input */}
-                  <div className="flex flex-col gap-2 items-center ">
+                  <div className="flex flex-col gap-4 items-center w-full">
                     <label
                       htmlFor="password"
-                      className="pl-3 font-bold text-xl w-fit "
+                      className="font-bold text-2xl md:text-3xl lg:text-4xl text-center"
                     >
-                      <span className="text-xl sm:text-2xl xl:text-3xl">
-                        Password :
-                      </span>
+                      Password
                     </label>
-                    <div className="w-full group relative mb-3">
+                    <div className="w-full relative">
                       <input
                         type={eyeState === eyeCross ? "password" : "text"}
                         name="password"
                         placeholder="Enter your password"
                         id="password"
-                        className="inputField placeholder:text-md py-1 pl-3 pr-16"
+                        className="inputField placeholder:text-base md:placeholder:text-lg py-3 md:py-4 pl-5 md:pl-6 pr-14 md:pr-16 w-full text-lg md:text-xl transition-all hover:border-purple-400 focus:scale-[1.02] shadow-md"
                         onChange={handleChange}
                       />
-                      <div className="group">
-                        <img onClick={() => {
-                          if (eyeState === eyeCross) {
-                            setEyeState(eyeOpen);
-                          } else {
-                            setEyeState(eyeCross);
-                          }
-                        }}
+                      <div className="group absolute right-3 md:right-4 top-1/2 -translate-y-1/2">
+                        <img 
+                          onClick={() => {
+                            if (eyeState === eyeCross) {
+                              setEyeState(eyeOpen);
+                            } else {
+                              setEyeState(eyeCross);
+                            }
+                          }}
                           src={eyeState}
-                          className="absolute w-6 right-4 top-2 sm:w-10 sm:right-4 sm:top-4"
-                          alt=""
+                          className="w-6 md:w-8 lg:w-10 cursor-pointer hover:scale-110 transition-transform"
+                          alt="Toggle password visibility"
                         />
                         {/* Tooltip */}
-                        {screenWidth > 640 && (<div className="absolute hidden top-8 -right-5   group-hover:block bg-gray-600 text-white text-sm sm:text-md font-semibold sm:font-bold p-1 rounded-full px-3 shadow-lg">
-                          {eyeState === eyeCross
-                            ? "Show Password"
-                            : "Hide Password"}
-                        </div>)}
+                        {screenWidth > 640 && (
+                          <div className={`absolute hidden top-10 md:top-12 -right-2 md:-right-5 group-hover:block text-white text-xs md:text-sm font-semibold md:font-bold py-1.5 px-3 md:py-2 md:px-4 rounded-full shadow-xl z-10 whitespace-nowrap animate-fade-in ${theme === 'light' ? 'bg-gray-700' : 'bg-gray-600'}`}>
+                            {eyeState === eyeCross ? "Show Password" : "Hide Password"}
+                          </div>
+                        )}
                       </div>
-
                     </div>
                   </div>
 
                   {/* If no account , signup */}
-                  <div className="text-center  mt-3 sm:mt-5 cursor-pointer ">
+                  <div className="text-center mt-2 cursor-pointer">
                     <Link to="/signup">
-                      <span className=" font-semibold text-xl sm:font-bold sm:text-2xl underline mt-5 " style={{ textUnderlineOffset: "4px" }}>
-                        Don't Have an Account? Sign Up !!
+                      <span className="font-semibold text-lg md:text-xl lg:text-2xl underline decoration-2 hover:text-purple-600 transition-colors" style={{ textUnderlineOffset: "5px" }}>
+                        Don't Have an Account? Sign Up!
                       </span>
                     </Link>
                   </div>
 
                   {/* Submit Button */}
-                  <div className="flex justify-center mt-8 ">
+                  <div className="flex justify-center mt-4">
                     <button
                       type="submit"
-                      className="border-x-4 border-y-2 p-3 pr-4 border-fuchsia-600  btnField font-bold text-3xl flex gap-2 items-center"
+                      className="border-4 md:border-x-4 md:border-y-2 p-4 md:p-5 px-8 md:px-10 border-fuchsia-600 btnField font-bold text-3xl md:text-4xl lg:text-5xl flex gap-3 md:gap-4 items-center hover:scale-105 active:scale-95 transition-transform shadow-xl hover:shadow-2xl"
                     >
                       <lord-icon
                         src="https://cdn.lordicon.com/nfgmqqvs.json"
                         trigger="loop"
                         delay="3000"
-                        style={{ width: "45px", height: "45px" }}
-                        class=""
+                        style={{ width: "35px", height: "35px" }}
+                        class="md:w-[45px] md:h-[45px]"
                       ></lord-icon>
-                      <span className="text-pink-700 ">Log In</span>
+                      <span className={`${theme === 'light' ? 'text-pink-700' : 'text-pink-300'}`}>Log In</span>
                     </button>
                   </div>
                 </div>}
             </form>
           </Background>
-        </main> 
+        </main>
       </div>
     </>
   );

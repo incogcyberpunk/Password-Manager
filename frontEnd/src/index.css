@@ -4,10 +4,57 @@
 
 @layer utilities{
     .inputField{
-        @apply rounded-full  border-2  border-gray-500 focus:ring-green-400 focus:ring-4 focus:outline-none focus:border-transparent;
+        @apply rounded-full border-2 border-gray-400 focus:ring-purple-400 focus:ring-4 focus:outline-none focus:border-transparent transition-all duration-300 ease-in-out;
         
     }
     .btnField{
-        @apply  rounded-full  bg-purple-200 active:bg-purple-300 border-fuchsia-600 text-pink-700
+        @apply rounded-full bg-gradient-to-r from-purple-200 to-pink-200 hover:from-purple-300 hover:to-pink-300 active:from-purple-400 active:to-pink-400 border-fuchsia-600 text-pink-700 transition-all duration-300;
     }
+}
+
+/* Dark mode utility overrides */
+[data-theme="dark"] .inputField {
+    @apply border-gray-600 bg-slate-800 text-white;
+}
+
+[data-theme="dark"] .btnField {
+    @apply from-purple-700 to-pink-700 hover:from-purple-600 hover:to-pink-600 active:from-purple-500 active:to-pink-500 text-white;
+}
+
+/* Smooth scrolling for the whole page */
+html {
+    scroll-behavior: smooth;
+}
+
+/* Gradient animation for text */
+@keyframes gradient-x {
+    0%, 100% {
+        background-position: 0% 50%;
+    }
+    50% {
+        background-position: 100% 50%;
+    }
+}
+
+.animate-gradient-x {
+    background-size: 200% auto;
+    animation: gradient-x 3s ease infinite;
+}
+
+/* Custom scrollbar */
+::-webkit-scrollbar {
+    width: 12px;
+}
+
+::-webkit-scrollbar-track {
+    background: #1e293b;
+}
+
+::-webkit-scrollbar-thumb {
+    background: linear-gradient(to bottom, #8b5cf6, #ec4899);
+    border-radius: 6px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+    background: linear-gradient(to bottom, #7c3aed, #db2777);
 }

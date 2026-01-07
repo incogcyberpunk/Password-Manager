@@ -63,10 +63,11 @@ function App() {
       element: (
         accessStatus ? <Vault /> : <Navigate to="/login" />
       ),
-
+    },
+    {
       path:"/globe",
       element: <Globe /> 
-},
+    },
   ]);
 
 return <RouterProvider router={router} />;

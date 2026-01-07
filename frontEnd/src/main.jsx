@@ -8,16 +8,19 @@ import App from "./App.jsx";
 import { SubmitStatusProvider } from "./context/submitStatus.context";
 import { AccessStatusProvider } from "./context/accessStatus.context";
 import { ActionStatusProvider } from "./context/actionStatus.context.jsx";
+import { ThemeProvider } from "./context/theme.context.jsx";
 
 createRoot(document.getElementById("root")).render(
   <StrictMode>
     <Toaster />
-    <ActionStatusProvider>
-      <AccessStatusProvider>
-        <SubmitStatusProvider>
-          <App />
-        </SubmitStatusProvider>
-      </AccessStatusProvider>
-    </ActionStatusProvider>
+    <ThemeProvider>
+      <ActionStatusProvider>
+        <AccessStatusProvider>
+          <SubmitStatusProvider>
+            <App />
+          </SubmitStatusProvider>
+        </AccessStatusProvider>
+      </ActionStatusProvider>
+    </ThemeProvider>
   </StrictMode>,
 );
