@@ -15,6 +15,7 @@ import { useTheme } from "../../context/theme.context.jsx";
 import eyeOpen from "../../assets/animatedGIF/eyeOpen.svg";
 import eyeCross from "../../assets/animatedGIF/eyeClose.svg";
 import Globe from "../../components/Globe.jsx";
+import useMediaQuery from "../../hooks/useMediaQuery.js";
 
 export default function Login() {
   const { login } = useLogin();
@@ -26,7 +27,7 @@ export default function Login() {
   const [whichRadio, setwhichRadio] = useState("username");
   const [finalLoginData, setFinalLoginData] = useState({});
   const [clickStatus, setClickStatus] = useState(false);
-  const [screenWidth, setscreenWidth] = useState(window.innerWidth);
+  const isWide = useMediaQuery("(min-width: 640px)");
 
   let [loginData, setLoginData] = useState({
     email: "",
@@ -64,21 +65,46 @@ export default function Login() {
 
   return (
     <>
-      <div className="min-h-screen w-full">
+      <div className="page-shell">
         <Navbar />
-        <main className="z-10 flex items-center justify-center min-h-[calc(100vh-80px)]">
+        <main className="z-10 flex items-center justify-center min-h-[calc(100vh-80px)] px-4 sm:px-6 lg:px-12">
           <Background>
-            <form className={`p-6 md:p-10 rounded-3xl md:rounded-[2rem] z-50 w-full max-w-md md:max-w-2xl mx-auto shadow-2xl backdrop-blur-sm border-2 ${theme === 'light' ? 'bg-white/95 text-gray-900 border-purple-200' : 'bg-slate-800/95 text-white border-slate-700'}`} onSubmit={handleSubmit} onLoad={() => {
-              if (initialLoad.current) {
-                radioClick.current.focus()
-                initialLoad.current = false
-              }
-            }}>
-              <Introduction />
-              <div className="font-extrabold text-4xl md:text-5xl lg:text-6xl flex justify-center my-6 md:my-8 transition-all">
-                <span className="bg-gradient-to-r from-purple-600 via-pink-600 to-purple-600 bg-clip-text text-transparent animate-gradient-x">
-                  LOGIN
-                </span>
+            <div className="w-full max-w-5xl mx-auto grid lg:grid-cols-[1fr_1.05fr] gap-6 lg:gap-10 items-center">
+              <aside className={`hidden lg:flex flex-col justify-between rounded-[2rem] p-10 shadow-2xl border ${theme === 'light' ? 'bg-white/70 border-amber-100' : 'bg-slate-900/70 border-slate-700'}`}>
+                <div>
+                  <div className="flex items-center gap-2 text-xs uppercase tracking-[0.3em] text-teal-700/80">
+                    <span className="h-px w-10 bg-teal-500/50"></span>
+                    <span>Secure Vault</span>
+                  </div>
+                  <h2 className="hero-title text-3xl xl:text-4xl mt-4 font-semibold text-slate-900 dark:text-white">
+                    Welcome back to your vault.
+                  </h2>
+                  <p className="mt-4 text-base xl:text-lg text-slate-600 dark:text-slate-300">
+                    Access your credentials instantly and keep your digital life organized.
+                  </p>
+                </div>
+                <div className="mt-10 space-y-3 text-sm xl:text-base">
+                  <div className={`flex items-center gap-3 rounded-2xl border p-4 ${theme === 'light' ? 'border-amber-100/60 bg-white/70' : 'border-slate-700 bg-slate-800/70'}`}>
+                    <span className="h-2.5 w-2.5 rounded-full bg-teal-500"></span>
+                    <span>Instant copy and paste</span>
+                  </div>
+                  <div className={`flex items-center gap-3 rounded-2xl border p-4 ${theme === 'light' ? 'border-amber-100/60 bg-white/70' : 'border-slate-700 bg-slate-800/70'}`}>
+                    <span className="h-2.5 w-2.5 rounded-full bg-amber-400"></span>
+                    <span>Encrypted storage</span>
+                  </div>
+                </div>
+              </aside>
+              <form className={`p-6 md:p-10 lg:p-12 rounded-3xl md:rounded-[2rem] z-50 w-full max-w-md md:max-w-2xl mx-auto shadow-2xl backdrop-blur-sm border ${theme === 'light' ? 'bg-white/95 text-slate-900 border-amber-100' : 'bg-slate-800/95 text-white border-slate-700'}`} onSubmit={handleSubmit} onLoad={() => {
+                if (initialLoad.current) {
+                  radioClick.current.focus()
+                  initialLoad.current = false
+                }
+              }}>
+              <div className="lg:hidden">
+                <Introduction />
+              </div>
+              <div className="hero-title font-semibold text-3xl sm:text-4xl md:text-5xl flex justify-center my-6 md:my-8">
+                <span className={`${theme === 'light' ? 'text-teal-700' : 'text-teal-300'}`}>Sign in</span>
               </div>
 
               {/* Details Section */
@@ -86,14 +112,14 @@ export default function Login() {
                   {/* Email/Username Input */}
                   <div className="flex flex-col items-center w-full space-y-4">
                     <div className="flex flex-col items-center gap-3 w-full">
-                      <label
-                        htmlFor="emailUsername"
-                        className="font-bold text-2xl md:text-3xl lg:text-4xl text-center"
-                      >
-                        Email or Username
-                      </label>
+                    <label
+                      htmlFor="emailUsername"
+                      className={`font-semibold text-lg sm:text-xl md:text-2xl text-center ${theme === 'light' ? 'text-slate-700' : 'text-slate-200'}`}
+                    >
+                      Email or Username
+                    </label>
 
-                      <div className="flex gap-4 md:gap-6 items-center justify-center">
+                      <div className="flex flex-wrap gap-4 md:gap-6 items-center justify-center">
                         <div className="flex gap-2 items-center">
                           <input
                             type="radio"
@@ -108,7 +134,7 @@ export default function Login() {
                           />
                           <label
                             htmlFor="usernameRadio"
-                            className="font-semibold text-lg md:text-xl lg:text-2xl cursor-pointer"
+                            className="font-medium text-sm sm:text-base md:text-lg cursor-pointer"
                           >
                             Username
                           </label>
@@ -126,7 +152,7 @@ export default function Login() {
                           />
                           <label
                             htmlFor="emailRadio"
-                            className="font-semibold text-lg md:text-xl lg:text-2xl cursor-pointer"
+                            className="font-medium text-sm sm:text-base md:text-lg cursor-pointer"
                           >
                             Email
                           </label>
@@ -147,7 +173,7 @@ export default function Login() {
                         }
                         placeholder={whichRadio === "email" ? "Enter your email" : "Enter your username"}
                         id="emailUsername"
-                        className="inputField placeholder:text-base md:placeholder:text-lg py-3 md:py-4 pl-5 md:pl-6 pr-5 w-full text-lg md:text-xl transition-all hover:border-purple-400 focus:scale-[1.02] shadow-md"
+                        className="inputField placeholder:text-sm sm:placeholder:text-base md:placeholder:text-lg w-full text-base sm:text-lg md:text-xl transition-all focus:scale-[1.01]"
                         onChange={handleChange}
                       />
                     </div>
@@ -157,7 +183,7 @@ export default function Login() {
                   <div className="flex flex-col gap-4 items-center w-full">
                     <label
                       htmlFor="password"
-                      className="font-bold text-2xl md:text-3xl lg:text-4xl text-center"
+                      className={`font-semibold text-lg sm:text-xl md:text-2xl text-center ${theme === 'light' ? 'text-slate-700' : 'text-slate-200'}`}
                     >
                       Password
                     </label>
@@ -167,7 +193,7 @@ export default function Login() {
                         name="password"
                         placeholder="Enter your password"
                         id="password"
-                        className="inputField placeholder:text-base md:placeholder:text-lg py-3 md:py-4 pl-5 md:pl-6 pr-14 md:pr-16 w-full text-lg md:text-xl transition-all hover:border-purple-400 focus:scale-[1.02] shadow-md"
+                        className="inputField placeholder:text-sm sm:placeholder:text-base md:placeholder:text-lg w-full text-base sm:text-lg md:text-xl transition-all focus:scale-[1.01]"
                         onChange={handleChange}
                       />
                       <div className="group absolute right-3 md:right-4 top-1/2 -translate-y-1/2">
@@ -184,8 +210,8 @@ export default function Login() {
                           alt="Toggle password visibility"
                         />
                         {/* Tooltip */}
-                        {screenWidth > 640 && (
-                          <div className={`absolute hidden top-10 md:top-12 -right-2 md:-right-5 group-hover:block text-white text-xs md:text-sm font-semibold md:font-bold py-1.5 px-3 md:py-2 md:px-4 rounded-full shadow-xl z-10 whitespace-nowrap animate-fade-in ${theme === 'light' ? 'bg-gray-700' : 'bg-gray-600'}`}>
+                        {isWide && (
+                          <div className={`absolute hidden top-10 md:top-12 -right-2 md:-right-5 group-hover:block text-white text-xs md:text-sm font-semibold md:font-bold py-1.5 px-3 md:py-2 md:px-4 rounded-full shadow-xl z-10 whitespace-nowrap ${theme === 'light' ? 'bg-slate-700' : 'bg-slate-600'}`}>
                             {eyeState === eyeCross ? "Show Password" : "Hide Password"}
                           </div>
                         )}
@@ -196,7 +222,7 @@ export default function Login() {
                   {/* If no account , signup */}
                   <div className="text-center mt-2 cursor-pointer">
                     <Link to="/signup">
-                      <span className="font-semibold text-lg md:text-xl lg:text-2xl underline decoration-2 hover:text-purple-600 transition-colors" style={{ textUnderlineOffset: "5px" }}>
+                      <span className="font-medium text-sm sm:text-base md:text-lg underline decoration-2 hover:text-teal-700 transition-colors" style={{ textUnderlineOffset: "5px" }}>
                         Don't Have an Account? Sign Up!
                       </span>
                     </Link>
@@ -206,7 +232,7 @@ export default function Login() {
                   <div className="flex justify-center mt-4">
                     <button
                       type="submit"
-                      className="border-4 md:border-x-4 md:border-y-2 p-4 md:p-5 px-8 md:px-10 border-fuchsia-600 btnField font-bold text-3xl md:text-4xl lg:text-5xl flex gap-3 md:gap-4 items-center hover:scale-105 active:scale-95 transition-transform shadow-xl hover:shadow-2xl"
+                      className="border-2 p-3 sm:p-4 md:p-5 px-6 sm:px-8 md:px-10 btnField font-semibold text-xl sm:text-2xl md:text-3xl flex gap-3 md:gap-4 items-center hover:scale-[1.02] active:scale-[0.98] transition-transform"
                     >
                       <lord-icon
                         src="https://cdn.lordicon.com/nfgmqqvs.json"

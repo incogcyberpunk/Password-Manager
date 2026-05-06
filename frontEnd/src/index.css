@@ -1,24 +1,63 @@
+@import url("https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700;800&family=Playfair+Display:wght@500;600;700&display=swap");
+
 @tailwind base;
 @tailwind utilities;
 @tailwind components;
 
+@layer base {
+    :root {
+        --font-display: "Playfair Display", serif;
+        --font-body: "Manrope", sans-serif;
+        --ink: #0f172a;
+        --ink-muted: #475569;
+        --sand: #f6f1e8;
+        --mist: #e4ebe7;
+        --teal: #0f766e;
+        --teal-dark: #115e59;
+        --amber: #f59e0b;
+        --navy: #0b1220;
+    }
+
+    body {
+        font-family: var(--font-body);
+        text-rendering: optimizeLegibility;
+        color: var(--ink);
+    }
+
+    h1, h2, h3 {
+        font-family: var(--font-display);
+        letter-spacing: 0.01em;
+    }
+}
+
 @layer utilities{
     .inputField{
-        @apply rounded-full border-2 border-gray-400 focus:ring-purple-400 focus:ring-4 focus:outline-none focus:border-transparent transition-all duration-300 ease-in-out;
+        @apply rounded-2xl border border-slate-300 bg-white/90 px-4 py-3 text-base shadow-sm focus:ring-2 focus:ring-teal-400/60 focus:outline-none focus:border-transparent transition-all duration-300 ease-in-out;
         
     }
     .btnField{
-        @apply rounded-full bg-gradient-to-r from-purple-200 to-pink-200 hover:from-purple-300 hover:to-pink-300 active:from-purple-400 active:to-pink-400 border-fuchsia-600 text-pink-700 transition-all duration-300;
+        @apply rounded-2xl bg-teal-600 hover:bg-teal-700 active:bg-teal-800 border border-teal-700 text-white shadow-lg transition-all duration-300;
     }
+}
+
+.page-shell {
+    min-height: 100vh;
+    width: 100%;
+    position: relative;
+    overflow-x: hidden;
+}
+
+.hero-title {
+    font-family: var(--font-display);
 }
 
 /* Dark mode utility overrides */
 [data-theme="dark"] .inputField {
-    @apply border-gray-600 bg-slate-800 text-white;
+    @apply border-slate-700 bg-slate-900/80 text-white;
 }
 
 [data-theme="dark"] .btnField {
-    @apply from-purple-700 to-pink-700 hover:from-purple-600 hover:to-pink-600 active:from-purple-500 active:to-pink-500 text-white;
+    @apply bg-teal-500 hover:bg-teal-400 active:bg-teal-300 text-slate-900 border-teal-400;
 }
 
 /* Smooth scrolling for the whole page */
@@ -47,14 +86,14 @@ html {
 }
 
 ::-webkit-scrollbar-track {
-    background: #1e293b;
+    background: #0b1220;
 }
 
 ::-webkit-scrollbar-thumb {
-    background: linear-gradient(to bottom, #8b5cf6, #ec4899);
+    background: linear-gradient(to bottom, #0f766e, #f59e0b);
     border-radius: 6px;
 }
 
 ::-webkit-scrollbar-thumb:hover {
-    background: linear-gradient(to bottom, #7c3aed, #db2777);
+    background: linear-gradient(to bottom, #0d9488, #fbbf24);
 }

@@ -8,6 +8,8 @@ import CopyBtn from "../../components/CopyBtn";
 
 import { useSubmitStatusContext } from "../../context/submitStatus.context";
 import useDeleteCredentials from "../../hooks/deleteCredentials";
+import useMediaQuery from "../../hooks/useMediaQuery";
+import { useTheme } from "../../context/theme.context";
 
 
 export default function Vault() {
@@ -15,6 +17,9 @@ export default function Vault() {
   
   const [expand, setExpand] = useState(false)
   const {performDelete}= useDeleteCredentials();
+  const isWide = useMediaQuery("(min-width: 768px)");
+  const isCompact = useMediaQuery("(max-width: 640px)");
+  const { theme } = useTheme();
 
   const { retrieveCredentials, retrievedCredentials = [], setRetrievedCredentials } = useVault();
 
@@ -78,61 +83,36 @@ export default function Vault() {
   // }, []);
 
   const laptopViewTable = (
-  <div className="overflow-x-auto px-4 md:px-8">
-    <table
-      className="bg-purple-100 mx-auto overflow-hidden rounded-3xl text-lg md:text-xl lg:text-2xl border-gray-300 mb-20 md:mb-40 min-w-[900px] shadow-2xl"
-    >
-      <thead>
-        <tr className="bg-gradient-to-r from-purple-600 to-pink-600 text-white">
-          <th className="px-4 md:px-6 py-3 md:py-4 border-b border-r text-2xl md:text-3xl border-purple-400">
-            Website{" "}
-          </th>
-          <th className="px-4 md:px-6 py-3 md:py-4 border-b border-r text-2xl md:text-3xl border-purple-400">
-            Login Email
-          </th>
-          <th className="px-4 md:px-6 py-3 md:py-4 border-b border-r text-2xl md:text-3xl border-purple-400">
-            Password
-          </th>
-        </tr>
-      </thead>
-      <tbody>
-        {retrievedCredentials?.map((item, index) => {
-          let whichBg = index % 2 === 0 ? "bg-purple-50" : "bg-white ";
-
-          return (
-            <tr className={`${whichBg} text-center hover:bg-purple-100 transition-colors`} key={item._id}>
-              <td>
-                {/* `td` are not block-level element that are table's layout's part and flex requires a block-level or inline-block element so used a div to use flex properly */}
-                <div className="flex justify-between items-center px-4 md:px-6 py-3 md:py-4 border-b-2 border-r-2 hover:bg-green-300 border-gray-300 transition-colors">
-                  <span className="w-full break-words">{item.websiteName}</span>
-                  <span className="ml-2">
-                    <CopyBtn textToCopy={item.websiteName} />
-                  </span>
-                </div>
-              </td>
-
-              <td>
-                <div className="flex justify-between items-center px-4 md:px-6 py-3 md:py-4 border-b-2 border-r-2 hover:bg-green-300 border-gray-300 transition-colors">
-                  <span className="w-full break-words">{item.loginEmail}</span>
-                  <span className="ml-2">
-                    <CopyBtn textToCopy={item.loginEmail} />
-                  </span>
-                </div>
-              </td>
-
-              <td>
-                <div className="flex justify-between items-center px-4 md:px-6 py-3 md:py-4 border-b-2 border-r-2 hover:bg-green-300 border-gray-300 transition-colors">
-                  <span className="w-full break-words">{item.loginPassword}</span>
-                  <span className="ml-2">
-                    <CopyBtn textToCopy={item.loginPassword} />
-                  </span>
-                </div>
-              </td>
-            </tr>
-          );
-        })}
-      </tbody>
-    </table>
+  <div className="px-4 md:px-8">
+    <div className="grid gap-4 lg:grid-cols-2">
+      {retrievedCredentials?.map((item) => (
+        <div key={item._id} className={`rounded-3xl border p-5 shadow-xl ${theme === 'light' ? 'border-amber-100 bg-white/90' : 'border-slate-700 bg-slate-900/80'}`}>
+          <div className="flex items-start justify-between gap-4">
+            <div>
+              <div className={`text-xs uppercase tracking-[0.25em] ${theme === 'light' ? 'text-teal-700/70' : 'text-teal-300/80'}`}>Website</div>
+              <div className={`mt-2 text-xl font-semibold break-words ${theme === 'light' ? 'text-slate-900' : 'text-white'}`}>{item.websiteName}</div>
+            </div>
+            <CopyBtn textToCopy={item.websiteName} />
+          </div>
+          <div className="mt-5 space-y-4">
+            <div className={`flex items-center justify-between gap-4 rounded-2xl border p-4 ${theme === 'light' ? 'border-slate-100 bg-slate-50' : 'border-slate-700 bg-slate-800/80'}`}>
+              <div className="min-w-0">
+                <div className={`text-xs uppercase tracking-[0.2em] ${theme === 'light' ? 'text-slate-500' : 'text-slate-400'}`}>Login Email</div>
+                <div className={`mt-1 text-sm break-all ${theme === 'light' ? 'text-slate-700' : 'text-slate-200'}`}>{item.loginEmail}</div>
+              </div>
+              <CopyBtn textToCopy={item.loginEmail} />
+            </div>
+            <div className={`flex items-center justify-between gap-4 rounded-2xl border p-4 ${theme === 'light' ? 'border-slate-100 bg-slate-50' : 'border-slate-700 bg-slate-800/80'}`}>
+              <div className="min-w-0">
+                <div className={`text-xs uppercase tracking-[0.2em] ${theme === 'light' ? 'text-slate-500' : 'text-slate-400'}`}>Password</div>
+                <div className={`mt-1 text-sm break-all ${theme === 'light' ? 'text-slate-700' : 'text-slate-200'}`}>{item.loginPassword}</div>
+              </div>
+              <CopyBtn textToCopy={item.loginPassword} />
+            </div>
+          </div>
+        </div>
+      ))}
+    </div>
   </div>
   )
 
@@ -141,7 +121,7 @@ export default function Vault() {
       {retrievedCredentials?.map((item, index) => {
         let whichBg = index % 2 === 0 ? "bg-purple-50" : "bg-white";
         return (
-          <div className={`${whichBg} px-4 md:px-5 py-3 md:py-4 rounded-xl md:rounded-2xl shadow-lg border-2 border-purple-600 hover:shadow-2xl transition-all hover:scale-[1.02]`} key={item._id}>
+          <div className={`${whichBg} px-4 md:px-5 py-3 md:py-4 rounded-2xl shadow-lg border hover:shadow-2xl transition-all hover:scale-[1.02] ${theme === 'light' ? 'border-amber-100' : 'border-slate-700 bg-slate-900/80'}`} key={item._id}>
             {/* Website name and delete entire credential */}
             <div className={`flex justify-between items-center ${expand && "border-b-2 border-purple-400 pb-2"}`}>
               {/* Expand/Collapse button */}
@@ -155,13 +135,13 @@ export default function Vault() {
               </div>
               {/* Website Name */}
               <div className="flex items-center flex-1 mx-3">
-                <span className="text-gray-800 font-extrabold text-2xl md:text-3xl break-words">{item.websiteName}</span>
+                <span className={`font-semibold text-lg md:text-xl break-words ${theme === 'light' ? 'text-slate-900' : 'text-white'}`}>{item.websiteName}</span>
               </div>
               {/* Delete credential button */}
               <div onClick={()=> performDelete(item._id)} className="cursor-pointer hover:scale-110 transition-transform">
                 <lord-icon
                   src="https://cdn.lordicon.com/skkahier.json"
-                  trigger={screen.width < 640 ? "click" : "hover"}
+                  trigger={isCompact ? "click" : "hover"}
                   state="morph-trash-full-to-empty"
                   style={{ width: "32px", height: '32px' }}>
                 </lord-icon>
@@ -171,16 +151,16 @@ export default function Vault() {
             {expand && <div className="space-y-2 md:space-y-3 mt-3">
 
               {/* Login Email */}
-              <div className="flex justify-between items-center py-2 px-2 bg-white/50 rounded-lg">
-                <span className="font-extrabold underline text-base md:text-lg text-gray-900 text-nowrap mr-2">Login Email :</span>
-                <span className="text-gray-800 text-sm md:text-base break-all flex-1 mx-2">{item.loginEmail}</span>
+              <div className={`flex justify-between items-center py-2 px-2 rounded-lg ${theme === 'light' ? 'bg-white/60' : 'bg-slate-800/80'}`}>
+                <span className={`font-semibold text-sm md:text-base text-nowrap mr-2 ${theme === 'light' ? 'text-slate-700' : 'text-slate-300'}`}>Login Email</span>
+                <span className={`text-xs sm:text-sm md:text-base break-all flex-1 mx-2 ${theme === 'light' ? 'text-slate-600' : 'text-slate-200'}`}>{item.loginEmail}</span>
                 <CopyBtn textToCopy={item.loginEmail} />
               </div>
 
               {/* Password */}
-              <div className="flex justify-between items-center py-2 px-2 bg-white/50 rounded-lg">
-                <span className="font-extrabold underline text-base md:text-lg text-gray-900 text-nowrap mr-2">Password :</span>
-                <span className="text-gray-800 text-sm md:text-base break-all flex-1 mx-2">{item.loginPassword}</span>
+              <div className={`flex justify-between items-center py-2 px-2 rounded-lg ${theme === 'light' ? 'bg-white/60' : 'bg-slate-800/80'}`}>
+                <span className={`font-semibold text-sm md:text-base text-nowrap mr-2 ${theme === 'light' ? 'text-slate-700' : 'text-slate-300'}`}>Password</span>
+                <span className={`text-xs sm:text-sm md:text-base break-all flex-1 mx-2 ${theme === 'light' ? 'text-slate-600' : 'text-slate-200'}`}>{item.loginPassword}</span>
                 <CopyBtn textToCopy={item.loginPassword} />
               </div>
             </div>}
@@ -192,32 +172,32 @@ export default function Vault() {
 
 
   // `retrievedCredentials && retrievedCredentials.length > 0 ` is done so that credentialsTable is only rendered when it is not null, thus preventing the application breaking down when it is null
-  const credentialsContent = retrievedCredentials?.length > 0 && (screen.width < 768 ? mobileViewTable : laptopViewTable)
+  const credentialsContent = retrievedCredentials?.length > 0 && (isWide ? laptopViewTable : mobileViewTable)
 
   const noCredentialsContent = (
     <h1 className="text-center flex flex-col items-center gap-8 md:gap-14 px-4">
-      <span className="text-3xl md:text-5xl lg:text-7xl font-bold">
+      <span className={`hero-title text-2xl sm:text-3xl md:text-5xl lg:text-6xl font-semibold ${theme === 'light' ? 'text-slate-900' : 'text-white'}`}>
         <span>No credentials in the vault</span>
         <lord-icon
           src="https://cdn.lordicon.com/keaiyjcx.json"
-          trigger={screen.width < 640 ? "loop" : "hover"}
+          trigger={isCompact ? "loop" : "hover"}
           delay="2000"
           state="hover-error-4"
           style={{width:"35px",height:"35px"}}
           class="relative top-1 md:top-2 left-2 md:left-3 inline-block md:w-[45px] md:h-[45px]">
         </lord-icon>
       </span>
-      <button className="border-4 md:border-x-4 md:border-y-2 w-[calc(100%-40px)] sm:w-auto p-3 md:p-4 px-4 md:px-6 border-fuchsia-600 btnField font-bold hover:scale-105 active:scale-95 transition-transform shadow-lg hover:shadow-2xl">
+      <button className="border-2 w-[calc(100%-40px)] sm:w-auto p-3 md:p-4 px-4 md:px-6 btnField font-semibold hover:scale-[1.02] active:scale-[0.98] transition-transform">
         <Link to="/addcredentials" className="flex items-center justify-center gap-2 md:gap-3">
           <lord-icon
             src="https://cdn.lordicon.com/ahoskycx.json"
-            trigger={screen.width < 640 ? "loop" : "hover"}
+            trigger={isCompact ? "loop" : "hover"}
             delay="1500"
             style={{ width: "50px", height: "50px" }}
             class="md:w-[65px] md:h-[65px]"
           ></lord-icon>
           <span
-            className={`text-pink-700 ${screen.width < 640 ? "text-2xl md:text-3xl" : "text-4xl md:text-5xl"}`}>
+            className={`text-slate-900 ${isCompact ? "text-lg sm:text-xl md:text-2xl" : "text-2xl md:text-3xl"}`}>
             Click to Add Credentials
           </span>
         </Link>
@@ -226,39 +206,40 @@ export default function Vault() {
   );
   return (
     <>
-      <Navbar />
-      <Background />
-      <header className="px-4">
-        <div className="font-extrabold w-full max-w-7xl mx-auto text-4xl md:text-5xl lg:text-6xl flex flex-col gap-2 md:gap-3 items-center justify-center mt-5 mb-8 md:mt-12 md:mb-16 lg:mt-20 lg:mb-20">
-          <span className="text-green-500 text-center">
-            Your <span className="bg-gradient-to-r from-purple-500 to-pink-500 bg-clip-text text-transparent">Vault</span>
-          </span>
-          <span className="font-bold text-xl md:text-2xl lg:text-3xl flex flex-col md:flex-row items-center gap-2 md:gap-3 text-center">
-            <lord-icon
-              src="https://cdn.lordicon.com/nizfqlnk.json"
-              trigger={screen.screenWidth > 640 ? "hover" : "loop"}
-              delay="1500"
-              style={{ width: "35px", height: "35px" }}
-              class="md:w-[45px] md:h-[45px]"
-            ></lord-icon>
-            <span className="flex items-center gap-2">
-              <span>All your credentials in one place</span>
-              <lord-icon
-                src="https://cdn.lordicon.com/jpgpblwn.json"
-                trigger="loop"
-                delay="1000"
-                state="loop-scale"
-                style={{ width: "28px", height: "28px" }}
-                class="md:w-[35px] md:h-[35px]"
-              ></lord-icon>
+      <div className="page-shell">
+        <Navbar />
+        <Background />
+        <header className="px-4">
+          <div className="hero-title font-semibold w-full max-w-6xl mx-auto text-3xl sm:text-4xl md:text-5xl lg:text-6xl flex flex-col gap-2 md:gap-3 items-center justify-center mt-5 mb-8 md:mt-12 md:mb-16 lg:mt-20 lg:mb-20">
+            <span className={`text-center ${theme === 'light' ? 'text-slate-900' : 'text-white'}`}>
+              Your <span className={`${theme === 'light' ? 'text-teal-700' : 'text-teal-300'}`}>Vault</span>
             </span>
-          </span>
-        </div>
-      </header>
-      <main className="min-h-[50vh]">
-        {!(retrievedCredentials && retrievedCredentials?.length) > 0 ? noCredentialsContent : credentialsContent}
-      </main>
-      <Background />
+            <span className={`font-medium text-base sm:text-lg md:text-2xl flex flex-col md:flex-row items-center gap-2 md:gap-3 text-center ${theme === 'light' ? 'text-slate-600' : 'text-slate-300'}`}>
+              <lord-icon
+                src="https://cdn.lordicon.com/nizfqlnk.json"
+                trigger={isCompact ? "loop" : "hover"}
+                delay="1500"
+                style={{ width: "32px", height: "32px" }}
+                class="md:w-[45px] md:h-[45px]"
+              ></lord-icon>
+              <span className="flex items-center gap-2">
+                <span>All your credentials in one place</span>
+                <lord-icon
+                  src="https://cdn.lordicon.com/jpgpblwn.json"
+                  trigger="loop"
+                  delay="1000"
+                  state="loop-scale"
+                  style={{ width: "26px", height: "26px" }}
+                  class="md:w-[35px] md:h-[35px]"
+                ></lord-icon>
+              </span>
+            </span>
+          </div>
+        </header>
+        <main className="min-h-[50vh] pb-16 md:pb-24">
+          {!(retrievedCredentials && retrievedCredentials?.length) > 0 ? noCredentialsContent : credentialsContent}
+        </main>
+      </div>
     </>
   );
 }
